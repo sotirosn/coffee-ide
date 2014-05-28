@@ -1,6 +1,4 @@
 log = console.log.bind console
-log "configuring server..."
-
 pm = require('child_process')
 fs = require('fs')
 coffee = require('coffee-script')
