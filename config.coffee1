@@ -1,0 +1,13 @@
+module.exports = (application)->
+	application.addProject
+		name: 'client'
+		path: 'client'
+	application.addProject
+		name: 'server'
+		path: 'server'
+	application.addProject
+		name: 'dungeoncraft'
+		path: '/Users/Games/Documents/GitHub/dungeoncraft'
+		
+	application.sitepaths =
+		'dungeoncraft': '/Users/Games/Documents/GitHub/dungeoncraft/lib/client'

@@ -1,1 +1,0 @@
-"node_modules/.bin/coffee" --nodejs --harmony_generators "server/server.coffee"

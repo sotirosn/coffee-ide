@@ -1,0 +1,281 @@
+.error {
+	color: red !important;
+}
+[hidden=true] {
+	display: none !important;
+}
+#mainpane {
+	position: absolute;
+	height: 100%;
+	left: 208px;
+	right: 0px;
+	bottom: 5px;
+	top: 0px;
+}
+#leftpane {
+	left: 0px;
+	width: 800px;
+}
+#rightpane {
+	left: 800px;
+	right: 0px;
+}
+html, body {
+	width: 100%;
+	height: 100%;
+}
+body {
+	font-family: Helvetica;
+	padding: 0;
+	margin: 0;
+}
+iframe {
+	border: none;
+	width: 100%;
+	height: 100%;
+}
+logo {
+	display: block;
+	font-size: 1.2em;
+	margin-bottom: 5px;
+	background: #8484FF;
+	padding: 5px;
+	border-radius: 3px;
+	color: #eee;
+	cursor: pointer;
+}
+logo small {
+	font-size: .8em;
+	color: #222;
+}
+hierarchy {
+	position: absolute;
+	left: 0px;
+	width: 200px;
+	bottom: 0px;
+	top: 0px;
+	background: #fafafa;
+	padding: 4px;
+}
+hierarchy label {
+	display: block;
+	cursor: pointer;
+}
+hierarchy label:hover {
+	color: orange;
+}
+hierarchy > label {
+	font-size: .8em;
+}
+project {
+	display: block;
+	background: #f8f8f8;
+	border: 1px solid #eee;
+	border-radius: 1px;
+	margin-bottom: 3px;
+}
+project > label {
+	font-size: .9em;
+	background: #fefefe;
+	color: #111;
+	padding: 2px;
+}
+project > label icon {
+	font-size: .6em;
+	height: 8px;
+	float: right;
+}
+project > div label {
+	font-size: .9em;
+}
+directory, file {
+	position: relative;
+	display: block;
+	background: #f8f8f8;
+	padding: 2px 5px;
+	cursor: pointer;
+}
+directory > label {
+	padding-left: 13px;
+	cursor: pointer;
+	color: #006;
+	background: url('images/folder-collapsed.png') no-repeat 2px 6px
+}
+directory[expanded] > label {
+	background: url('images/folder-expanded.png') no-repeat 0px 9px
+}
+directory > div.files {
+	padding-left: 13px;
+}
+file:hover {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	margin: -1px;
+	z-index: 1;
+}
+
+tabarea {
+	position: absolute;
+	bottom: 0px;
+	top: 29px;
+}
+toolbar {
+	display: block;
+	margin: 0px;
+	padding: 2px;
+	height: 25px;
+}
+toolbar icon {
+	display: inline-block;
+	font-size: .8em;
+	position: relative;
+	height: 15px;
+	top: 0px;
+	margin-right: 3px;
+}
+contents {
+	border: 1px solid #eee;
+	margin: 0px 3px;
+	position: absolute;
+	top: 26px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
+tabs {
+	padding: 0px 3px;
+	display: block;
+	height: 25px;
+}
+tab {
+	padding: 5px 25px 5px 10px;
+	display: inline-block;
+	float: left;
+	margin-right: 2px;
+	border-radius: 10px 10px 0 0;
+	background: #ccc;
+	border: 1px solid #dfdfdf;
+	position: relative;
+	height: 15px;
+	color: #888;
+	z-index: 1;
+}
+tab:hover {
+	color: white;
+	border: 1px solid grey;
+	cursor: pointer;
+}
+close {
+	font-weight: bold;
+	padding: 0px 0 2px 2px;
+	width: 10px;
+	height: 10px;
+	font-size: .8em;
+	right: 4px;
+	top: 5px;
+	border-radius: 2px;
+	position: absolute;
+	border: 2px solid #888;
+	color: #888;
+	display: block;
+	line-height: 10px;
+	z-index: 1;
+}
+close:hover {
+	color: #fafafa;
+	border: 2px solid #fafafa;
+	cursor: pointer;
+}
+tab[active=true] {
+	background: #eee;
+	color: grey;
+}
+tab[active=true]:hover {
+	cursor: auto;
+	border: 1px solid #dfdfdf;
+}
+tab[active=true] close:hover {
+	border: 2px solid white;
+	color: white;
+}
+textarea {
+	border: none;
+	display: block;
+	min-width: 100%;
+	height: 100%;
+	resize: none;
+	white-space: pre;
+	word-wrap: none;
+}
+div.CodeMirror {
+	height: 100%;
+	width: 100%;
+}
+icon {
+	padding: 3px 7px;
+	border: 2px solid grey;
+	border-radius: 2px;
+	background: #eee;
+	color: #111;
+	cursor: pointer;
+}
+icon:hover {
+	border: 2px solid orange;
+	color: orange;
+}
+icon[toggled] {
+	background: #999;
+}
+icon.error {
+	border: 2px solid red;
+	background: #fee;
+}
+
+contextmenu {
+	position: absolute;
+	display: block;
+	background: #eee;
+	border: 1px solid grey;
+	z-index: 100;
+	margin: 1px;
+	box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.5);
+	font-size: .8em;
+}
+contextmenu icon {
+	display: block;
+	border: none;
+	background: none;
+}
+contextmenu icon:hover {
+	border: none;
+}
+contextmenu div {
+	margin: 1px 5px 1px 25px;
+	border-left: 2px groove white;
+}
+
+log {
+	//font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
+	font-family: "Andale Mono", AndaleMono, monospace;
+	display: block;
+	overflow: auto;
+	height: 100%;
+}
+log pre, log p {
+	margin: 0;
+	border-bottom: 1px solid #eee;
+}
+log span {
+	display: block;
+	color: blue;
+}
+log span.key {
+	display: inline;
+}
+log > div > span {
+	background: #f8f8f8;
+	border-top:1px solid #eee;
+	border-bottom: 1px solid #eee;
+	cursor: pointer;
+}
+

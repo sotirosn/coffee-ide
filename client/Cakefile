@@ -1,0 +1,49 @@
+log = console.log.bind console
+coffee = require 'coffee-script'
+fs = require 'fs'
+targetdir = "lib"
+sourcedir = "."
+projectfiles = ['.project.coffee']
+
+compile = (sourcename, targetname)->	
+	console.log "compiling #{sourcename} -> #{targetname}"
+	fs.readFile sourcename, encoding:'utf8', (error, source)->
+		return console.error error if error
+
+		try target = coffee.compile source, bare:true
+		catch error then return console.error "In #{sourcename}:\n#{error}"
+
+		fs.writeFile targetname, target,  encoding:'utf8', (error)->
+			return console.error error if error
+
+isNewer = (sourcename, targetname)->
+	if fs.existsSync targetname
+		sourcestat = fs.statSync sourcename
+		targetstat = fs.statSync targetname
+		if sourcestat.mtime < targetstat.mtime
+			console.log "skipping #{sourcename}"
+			return false
+	return true
+
+option '-f', '--files [FILE*]', 'the file to save'
+
+task 'build:client', "compiles all client source *.coffee into lib/*.coffee.js", (options)->
+	sourcelist = options.files || fs.readdirSync sourcedir
+	for sourcename in sourcelist
+		if sourcename.match /^[^.].*[.]coffee$/
+			targetname = "#{targetdir}/#{sourcename}.js"
+			if isNewer sourcename, targetname
+				compile sourcename, targetname
+
+task 'build:project', "compiles project .coffee into project .coffee.js", (options)->
+	sourcelist = options.files || fs.readdirSync sourcedir
+	for sourcename in sourcelist
+		if sourcename.match /^[.](.*[.]coffee|coffee)$/
+			targetname = sourcename + '.js'
+			if isNewer sourcename, targetname
+				compile sourcename, targetname
+
+task 'files:onwrite', "Runs post-write actions after the file has been saved.", (options)->
+	log "files written: " + options.files.join ', '
+	invoke 'build:project'
+	invoke 'build:client'

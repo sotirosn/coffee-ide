@@ -1,22 +1,15 @@
-log = console.log.bind console
-pm = require('child_process')
-fs = require('fs')
-coffee = require('coffee-script')
-https = require('https').createServer {
-	key: fs.readFileSync('server.key')
-	cert: fs.readFileSync('server.cert')
-}, express = require('express')()
-multiparty = require('multiparty')
-	
 Generator = (-> yield null).constructor
-
-merge = (objects...)->
-	result = {}
-	for o in objects
-		for key, value of o
-			result[key] = value
-	return result
-
+log = console.log.bind console
+#pm = require('child_process')
+fs = require('fs')
+#coffee = require('coffee-script')
+#https = require('https').createServer {
+#	key: fs.readFileSync('server.key')
+#	cert: fs.readFileSync('server.cert')
+#}
+express = require('express')
+#multiparty = require('multiparty')
+  
 class Routine
 	constructor:(iterator, args...)->
 		@iterator = new iterator(this, args...)
@@ -55,9 +48,10 @@ class Utility extends Routine
 
 	# request helpers
 	streamfile:(filename)->
-		log @request.headers
+    	log @request.headers
 		@resume(null)
-		###
+		####
+        ###
 		form = new multiparty.Form
 		form.parse @request, (error, fields, files)=>
 			log "here"
@@ -80,6 +74,7 @@ class Utility extends Routine
 		stream.on 'complete', =>
 			@resume stream
 		####
+        ###
 	prefetchdata:->
 		@prefetching = (true)
 		@request.on 'data', (chunk)=>

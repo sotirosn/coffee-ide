@@ -1,0 +1,25 @@
+<html>
+<head>
+	<script src="lib/routine.coffee.js"></script>
+	<script src="lib/html.coffee.js"></script>
+	<script src="lib/ide.coffee.js"></script>
+	<script src="socket.io.js"></script>
+	<script src="/codemirror/lib/codemirror.js"></script>
+	<script src="/codemirror/mode/coffeescript/coffeescript.js"></script>
+	<script src="/codemirror/mode/xml/xml.js"></script>
+	<script src="/codemirror/mode/css/css.js"></script>
+	<script src="/codemirror/mode/javascript/javascript.js"></script>
+	<script src="/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<link href="/codemirror/lib/codemirror.css" rel='stylesheet' type='text/css'/>
+	<link href="images/favicon.ico" rel="shortcut icon"/>
+	<link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+	<hierarchy><logo>Coffee IDE</logo></hierarchy>
+	<div id="mainpane">
+		<toolbar><icon onclick="document.location.reload()">reload</icon></toolbar>
+		<tabarea id='leftpane'><tabs></tabs><contents></contents></tabarea>
+		<tabarea id='rightpane'><tabs></tabs><contents></contents></tabarea>
+	</div>
+</body>
+</html>

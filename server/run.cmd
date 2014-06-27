@@ -1,0 +1,1 @@
+call coffee --nodejs --harmony_generators server\server.fresh.coffee %1 %2 %3
