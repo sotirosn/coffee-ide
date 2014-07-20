@@ -80,6 +80,11 @@ project > label {
 	color: #111;
 	padding: 2px;
 }
+project > label button {
+	font-size: .7em;
+	height: 20px;
+	float: right;
+}
 project > label icon {
 	font-size: .6em;
 	height: 8px;
@@ -142,6 +147,13 @@ contents {
 	left: 0px;
 	right: 0px;
 }
+contents > * {
+	display: block;
+	overflow: auto;
+	max-width: 100%;
+	max-height: 100%;
+}
+	
 tabs {
 	padding: 0px 3px;
 	display: block;
@@ -229,6 +241,39 @@ icon[toggled] {
 icon.error {
 	border: 2px solid red;
 	background: #fee;
+}
+
+menu {
+	position: absolute;
+	background: #eee;
+	border: 1px solid grey;
+	z-index: 100;
+	margin: 1px;
+	box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.5);
+	font-size: .8em;
+	padding: 2px;
+}
+menu div {
+	margin: 1px 5px 1px 25px;
+	border-left: 2px groove #fff;
+	padding-left: 2px;
+	min-width: 150px;
+}
+menu label {
+	display: block;
+	padding: 2px 5px;
+	margin: 3px 0;
+	border: 1px solid #eee;
+}	
+menu label:hover {
+	border: 1px solid #ccc;
+	border-radius: 2px;
+}
+menu hr {
+	margin: 0;
+	margin-top: 1px;
+	border: none;
+	border-top: 2px groove #fff;
 }
 
 contextmenu {

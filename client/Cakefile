@@ -43,7 +43,7 @@ task 'build:project', "compiles project .coffee into project .coffee.js", (optio
 			if isNewer sourcename, targetname
 				compile sourcename, targetname
 
-task 'files:onwrite', "Runs post-write actions after the file has been saved.", (options)->
+task 'onwrite', "Runs post-write actions after the file has been saved.", (options)->
 	log "files written: " + options.files.join ', '
 	invoke 'build:project'
 	invoke 'build:client'

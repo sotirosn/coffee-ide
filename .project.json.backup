@@ -1,0 +1,13 @@
+{
+	"clientPort": 9080,
+	"applicationPort": 9090,
+	"password":"$sounds",
+	"sessions":{},
+	
+	"projectdir":"/Users/Games/Documents/GitHub/ingenuityacoustics.com"
+	"directories": {
+		"project":"."
+		"site":"site"
+		"editor":"editor"
+	}
+}

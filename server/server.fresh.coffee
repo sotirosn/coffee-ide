@@ -8,10 +8,11 @@ log process.argv
 # then it recursivly calls .end.next()
 # so it could actually call iterator.end...end.next()
 
-# warps a routine (generator) in a thread (iterator) and returns a callback
-# the thread is expected to return a callback from next which then accepts the
-# iterator object itself.  This gives the the async callback the ability to resume
-# the iterator with next() or throw an exception with throw()
+# warps a generator in a class and and sends back this class 
+# on the first yield via callback.
+# This gives the the async callback the ability to resume
+# the iterator with next() or throw an exception with throw() or return a value
+# which is sen
 class Routine
 	constructor:(@name, @iterator, @onerror = (error)->throw error)->
 		
