@@ -1,0 +1,13 @@
+{
+	"rootdir": "/Users/Nick/coffee-ide/project",
+	"clientdir": "/Users/Nick/coffee-ide/newclient",
+	"webserver": { 
+		"port": 8080
+	},
+	"appserver": { 
+		"port": 8090,
+		"cert": "server.cert",
+		"key": "server.key"
+	},
+	"sessions": {}
+}

@@ -1,0 +1,33 @@
+{
+  "name": "coffee-ide",
+  "version": "0.1.0",
+  "description": "A web application IDE written in CoffeeScript.",
+  "author": "Nick Sotiros",
+  "readme": "README.md",
+  
+  "keywords": [
+    "coffee-scirpt",
+    "editor",
+    "ide",
+    "web",
+    "application"
+  ],
+  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sotirosn/coffee-ide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sotirosn/coffee-ide/issues"
+  },
+  "homepage": "https://github.com/sotirosn/coffee-ide",
+  
+  "engine": {
+    "node": ">0.11.3"
+  },
+  "dependencies": {
+    "coffee-scirpt": "git://github.com/almost/coffee-script.git",
+    "express": "~4.3.1",
+	"websocket": "1.0.8"
+  }
+}

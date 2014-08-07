@@ -13,109 +13,21 @@
 	<script src="/codemirror/mode/jade/jade.js"></script>
 	
 	<!-- ide application scripts -->
-	<script src="lib/editors.coffee.js"></script>
-	<script src="lib/console.coffee.js"></script>
+	<!--script src="lib/console.coffee.js"></script-->
+	<script src="lib/base.coffee.js"></script>
 	<script src="lib/client.coffee.js"></script>
+	<script src="lib/editor.coffee.js"></script>
+	<script src="lib/tabs.coffee.js"></script>
+	<script src="lib/log.coffee.js"></script>
+	<script src="init.js"></script>
 </head>
 <body>
-	<hierarchy id="hierarchy"><logo>Coffee IDE</logo></hierarchy>
+	<hierarchy id="hierarchy"><logo>My Coffee IDE</logo></hierarchy>
 	<div id="mainpane">
 		<toolbar id="toolbar"><icon onclick="document.location.reload()">reload</icon></toolbar>
-		<tabarea id="leftpane"></tabarea>
-		<tabarea id="rightpane"></tabarea>
+		<tabarea id="leftpane"><div class='tabs'></div><div class='contents'></div></tabarea>
+		<tabarea id="rightpane"><div class='tabs'></div><div class='contents'></div></tabarea>
 		<statusbar id="statusbar"></statusbar>
 	</div>
 </body>
 </html>
-<!--style>
-#preview img {
-	max-width: 50px;
-	max-height: 50px;
-	border: 2px solid #333;
-	border-radius: 2px;
-	padding: 5px;
-	margin: 3px;
-}
-</style>
-<script>
-	log = console.log.bind(console);
-	$ = document.querySelector.bind(document);
-	
-	function loadImageThumbnail(img, file) {
-		var reader = new FileReader();
-		reader.onload = function(event) { 
-			log(img.src = event.target.result); 
-		}; 
-		reader.readAsDataURL(file);
-	}
-	
-	function uploadBinaryFile(file) {
-		var request = new XMLHttpRequest();
-		request.open('POST', '/upload/site/' + uploadDestination + '/' + file.name);
-		request.upload.onprogress = function(event) {
-			if (event.lengthComputable) {
-				var percentage = Math.round((event.loaded * 100) / event.total);
-				log("upload " + file.name + ": " + percentage + "% complete");
-			}
-		};
-		request.upload.onloadend = function(event){
-			log("upload " + file.name + ": complete");
-		};
-		request.send(file);
-	}
-	
-	function upload(files) {
-		log("uploading " + files.length + " file" + (files.length == 1 ? "." : "s."));
-		for(var i = 0; i < files.length; ++i) {
-			uploadBinaryFile(files[i]);
-		}
-	}
-		
-	function preview(files) {
-		log(files);
-		
-		previewElement.innerHTML = '';
-		for(var i = 0; i < files.length; ++i) {
-			var file = files[i];
-			var thumbnail = document.createElement('img');
-			previewElement.appendChild(thumbnail);
-			
-			loadImageThumbnail(thumbnail, file);
-		}
-	}
-	
-	function selectDestination(destination) {
-		return function() { uploadDestination = destination.innerHTML; };
-	}
-	
-	function listDestinations(ul) {
-		var filelist = yield http.get('listdir/site/uploads');
-		for(var filename in filelist) {
-			var filetype = filelist[filename];
-			if(filetype == 'dir') {
-				li = document.createElement('li');
-				li.innerHTML = filename;
-				li.onclick = selectDestination(filename);
-				ul.appendChild(li);
-			}
-		}
-	}
-	
-	this.onload = function() {
-		previewElement = $('#preview');
-	}
-	
-</script>
-</head>
-<body>
-<h1>soundwood.com</h1>
-	<form action="/login" method="post">
-		<input name="password" type="password" placeholder="password"/><br/>
-		<button type="submit">Sign In</button>
-	</form>
-	<br/>
-	<input id="files" type="file" multiple=true onchange="preview(this.files)"/><br/>
-	<button onclick="upload($('#files').files)">Upload</button>
-	<div id="preview"></div>
-</body>
-</html -->	

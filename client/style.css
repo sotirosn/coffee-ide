@@ -93,23 +93,23 @@ project > label icon {
 project > div label {
 	font-size: .9em;
 }
-directory, file {
+folder, file {
 	position: relative;
 	display: block;
 	background: #f8f8f8;
 	padding: 2px 5px;
 	cursor: pointer;
 }
-directory > label {
+folder > label {
 	padding-left: 13px;
 	cursor: pointer;
 	color: #006;
 	background: url('images/folder-collapsed.png') no-repeat 2px 6px
 }
-directory[expanded] > label {
+folder[expanded=true] > label {
 	background: url('images/folder-expanded.png') no-repeat 0px 9px
 }
-directory > div.files {
+folder > div.files {
 	padding-left: 13px;
 }
 file:hover {
@@ -138,7 +138,7 @@ toolbar icon {
 	top: 0px;
 	margin-right: 3px;
 }
-contents {
+div.contents {
 	border: 1px solid #eee;
 	margin: 0px 3px;
 	position: absolute;
@@ -147,14 +147,14 @@ contents {
 	left: 0px;
 	right: 0px;
 }
-contents > * {
+div.contents > * {
 	display: block;
 	overflow: auto;
 	max-width: 100%;
 	max-height: 100%;
 }
 	
-tabs {
+div.tabs {
 	padding: 0px 3px;
 	display: block;
 	height: 25px;
