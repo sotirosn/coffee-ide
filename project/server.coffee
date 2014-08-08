@@ -40,11 +40,11 @@ app.users =
 			project: new Project
 				path: '.'
 			client: new Project
-				path: 'newclient'
+				path: 'client'
 				dirmap:
 					source: new SourceFolder
 						path: 'source'
 						targetdir: '../lib'
 
 			server: new ServerProject
-				path: 'newserver'
+				path: 'server'
