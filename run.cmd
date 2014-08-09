@@ -1,0 +1,1 @@
+coffee --nodejs --harmony_generators project/server

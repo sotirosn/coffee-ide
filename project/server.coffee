@@ -1,6 +1,5 @@
 log = console.log.bind console
 
-process.chdir __dirname
 sourcedir = "../server"
 	
 {User, Directory, Project, SourceFolder} = require "#{sourcedir}/Path"
@@ -33,7 +32,7 @@ class ServerProject extends Project
 
 	run:->
 		yield (routine)=>
-			child = @spawn 'coffee', ['--nodejs', '--harmony_generators', 'server.coffee', 'devel.config.json'], detached:(true)
+			child = @spawn 'coffee', ['--nodejs', '--harmony_generators', 'project/server.coffee', 'run.config.json'], detached:(true)
 			
 			if pid = child.pid
 				log "child process (#{pid}) started"
