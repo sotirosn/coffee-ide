@@ -1,4 +1,5 @@
 log = console.log.bind console
+clientdir = require('path').resolve "#{__dirname}/../client"
 
 class Application
 	WebSocketServer = require('websocket').server
@@ -6,11 +7,10 @@ class Application
 	https = require 'https'
 	http = require 'http'
 	express: express
-	{exec} = require 'child_process'
 
 	({start, run, fs, pm, WaitAll} = require './Routine').debug = false
 	{unescape} = require('querystring')
-
+	
 	fs:fs
 	processes: {}
 
@@ -48,22 +48,22 @@ class Application
 
 	initialize:(@configpath = '.config.json')->
 		@config = JSON.parse (yield fs.read @configpath)
-
-		process.chdir @config.rootdir
 		log process.cwd()
 
-		# starting client web server
-		https.createServer(
+		sslData =
 			cert: yield fs.read @config.appserver.cert
 			key: yield fs.read @config.appserver.key
+		
+		# starting client web server
+		https.createServer(
+			sslData
 			@webserver
 		).listen @config.webserver.port, =>
 			log "webserver listening on port: #{@config.webserver.port}"
 
 		# starting secure app server
 		server = https.createServer(
-			cert: yield fs.read @config.appserver.cert
-			key: yield fs.read @config.appserver.key
+			sslData
 			@appserver
 		).listen @config.appserver.port, =>
 			log "appserver listening on port: #{@config.appserver.port}"
@@ -75,34 +75,28 @@ class Application
 		
 		ws.on 'request', (request)=>
 			try
-				{httpRequest, socket} = request
 				user = @authorize request 
-				[_, pid] = httpRequest.url.match /[?]pid=([^&]*)/
+				[_, pid] = request.httpRequest.url.match /[?]pid=([^&]*)/
 				
 				log 'connecting to ' + pid
 				childProcess = @processes[pid]
-				throw new @ReqeustError 'invalid pid' unless process
+				throw new @constructor.RequestError 'invalid pid' unless childProcess
 
-				socket = request.accept()
-				socket.on 'close', =>
-					# kill the process if it is still running
-					if @processes[pid]
-						exec "kill -TERM -#{pid}", (error, stdout, stderr)->
-							if error then console.error error
-					log "connection (#{pid}) closed"
-
+				connection = request.accept()
+				connection.on 'close', ->
+					log "child process (#{pid}) connection closed"
+					childProcess.kill() if !childProcess.killed
+				
 				childProcess.stdout.on 'data', (data)->
-					socket.send JSON.stringify { type:'stdout', data:data.toString() }
+					connection.send JSON.stringify { type:'stdout', text:data.toString() }
 				childProcess.stderr.on 'data', (data)->
-					socket.send JSON.stringify { type:'stderr', data:data.toString() }
-				childProcess.on 'exit', (exitcode)->
-					# in case process was not terminated from socket closure, close socket now
-					socket.close()
-
+					connection.send JSON.stringify { type:'stderr', text:data.toString() }
+				childProcess.connection = connection
+				
 			catch exception
 				{name, message, stack} = exception
-				console.error stack
-				socket.write JSON.stringify {name, message}
+				console.error 'Socket Error:', stack
+				request.socket.write {name, message}
 
 	class @AuthenticationError extends Error
 		name: 'AuthenticationError'
@@ -184,7 +178,8 @@ class Application
 
 			# redirect root urls to index.html
 			.get '/', app.route (request, response)->
-				response.sendfile "#{@config.clientdir}/index.html"
+				log "#{clientdir}/index.html"
+				response.sendfile "#{clientdir}/index.html"
 
 			# custom js to link the location of the appserver
 			.get '/init.js', app.route (request, response)->
@@ -195,7 +190,7 @@ class Application
 
 			# static client files
 			.get '/*', app.route (request, response)->
-				response.sendfile "#{@config.clientdir}/#{request.params[0]}"
+				response.sendfile "#{clientdir}/#{request.params[0]}"
 
 		# setup appserver to process user commands
 		app.appserver

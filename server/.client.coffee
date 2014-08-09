@@ -7,31 +7,34 @@ class extends ide.project
 
 		@addButton 'run', =>
 			yield @saveAll()
+			@connection?.close()
+			
 			if @log then @log.show()
 			else
-				log 'new log'
 				@log = new Log
 				@log.tab = app.rightpane.createTab 'server', @log, =>
 					@connection?.close()
 					delete @connection
-
-			try
-				@connection?.close()
 				
+			
+				
+			
+			try
 				pid = yield http.get "run/#{@path}"
 				@connection = yield http.connect '.', {pid}
-				@connection.onmessage = ({data})=>
-					{type, data} = JSON.parse data
-					switch type
-						when 'stdout' then @log.stdout data
-						when 'stderr' then @log.stderr data
-				@connection.onclose = (event)=>
-					log event
-					@log.stdout "connection closed: #{event.data}"
-					delete @connection
-				
+				@log.stdout "connection opened (#{pid})"
 			catch exception
 				@log.error exception
+				
+			@connection.onmessage = ({data})=>
+				{type, text} = JSON.parse data
+				switch type
+					when 'stdout' then @log.stdout text
+					when 'stderr' then @log.stderr text
+			@connection.onclose = (event)=>
+				@log.stdout "connection closed (#{pid})"
+				delete @connection
+				
 			
 		@addButton 'update', =>
 			yield @saveAll()

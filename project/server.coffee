@@ -1,30 +1,59 @@
 log = console.log.bind console
 
-sourcedir = "/Users/Nick/coffee-ide/server"
-
-{spawn} = require "child_process"
+process.chdir __dirname
+sourcedir = "../server"
+	
 {User, Directory, Project, SourceFolder} = require "#{sourcedir}/Path"
 Application = require "#{sourcedir}/Application"
 
 class ServerProject extends Project
-	processes:{}
+	log {spawn, exec} = require 'child_process'
 	
+	switch process.platform
+		when 'win32'
+			ChildProcess = (spawn 'cmd').constructor
+			ChildProcess.prototype.kill = ->
+				log "child process (#{@pid}) terminated by user"
+				exec "taskkill /F /T /PID #{@pid}", (error, stdout, stderr)->
+					console.error error if error
+			@prototype.spawn = (command, commandline)->
+				spawn 'cmd', ['/K', command, commandline...]
+		else
+			ChildProcess = (spawn 'ls').constructor
+			ChildProcess.prototype.kill = ->
+				log "child process (#{@pid}) terminated by user"
+				exec "kill -TERM -#{@pid}", (error, stdout, stderr)->
+					console.error error if error
+			@prototype.spawn = (command, commandline)->
+				spawn command, commandline, detach:(true)
+
+	constructor:->
+		super
+		@processes = app.processes
+
 	run:->
 		yield (routine)=>
-			child = spawn 'coffee', ['--nodejs', '--harmony_generators', 'server.coffee', 'devel.config.json'], detached:true
-		
-			if child.pid
-				log "child process (#{child.pid}) started"
+			child = @spawn 'coffee', ['--nodejs', '--harmony_generators', 'server.coffee', 'devel.config.json'], detached:(true)
+			
+			if pid = child.pid
+				log "child process (#{pid}) started"
+				@processes[pid] = child
 				
-				app.processes[child.pid] = child
-
-				child.on 'exit', (exitCode)=>
-					log "child process exited with exit code: #{exitCode}"
-					delete app.processes[child.pid]
-
-				routine.next child.pid
+				child.on 'exit', (exitcode)=>
+					log "child process (#{pid}) exited with exit code: #{exitcode}"
+					delete @processes[pid]
+					
+					if child.connection
+						# close the associated websocket connection if it exists
+						child.connection.close()
+					else
+						# if no connection was ever made, flush child output
+						child.stdout.pipe process.stdout
+						child.stderr.pipe process.stderr
+				
+				routine.next pid
 			else
-				log "child process failed to execute"
+				log 'child process failed to execute'
 				child.on 'error', (error)->
 					routine.throw error
 
@@ -34,11 +63,11 @@ app = Application.create(process.argv[2])
 app.users =
 	developer: new User
 		password: '$masterDev'
-		path: '/Users/Nick/coffee-ide'
+		path: "#{__dirname}/.."
 		isVirtual: true
 		dirmap:
 			project: new Project
-				path: '.'
+				path: 'project'
 			client: new Project
 				path: 'client'
 				dirmap:

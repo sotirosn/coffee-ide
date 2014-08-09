@@ -14,46 +14,45 @@ var __hasProp = {}.hasOwnProperty,
     this.addButton('run', function*() {
       var pid, _ref;
       yield _this.saveAll();
+      if ((_ref = _this.connection) != null) {
+        _ref.close();
+      }
       if (_this.log) {
         _this.log.show();
       } else {
-        log('new log');
         _this.log = new Log;
         _this.log.tab = app.rightpane.createTab('server', _this.log, function() {
-          var _ref;
-          if ((_ref = _this.connection) != null) {
-            _ref.close();
+          var _ref1;
+          if ((_ref1 = _this.connection) != null) {
+            _ref1.close();
           }
           return delete _this.connection;
         });
       }
       try {
-        if ((_ref = _this.connection) != null) {
-          _ref.close();
-        }
         pid = yield http.get("run/" + _this.path);
         _this.connection = yield http.connect('.', {
           pid: pid
         });
-        _this.connection.onmessage = function(_arg) {
-          var data, type, _ref1;
-          data = _arg.data;
-          _ref1 = JSON.parse(data), type = _ref1.type, data = _ref1.data;
-          switch (type) {
-            case 'stdout':
-              return _this.log.stdout(data);
-            case 'stderr':
-              return _this.log.stderr(data);
-          }
-        };
-        return _this.connection.onclose = function(event) {
-          log(event);
-          _this.log.stdout("connection closed: " + event.data);
-          return delete _this.connection;
-        };
+        _this.log.stdout("connection opened (" + pid + ")");
       } catch (exception) {
-        return _this.log.error(exception);
+        _this.log.error(exception);
       }
+      _this.connection.onmessage = function(_arg) {
+        var data, text, type, _ref1;
+        data = _arg.data;
+        _ref1 = JSON.parse(data), type = _ref1.type, text = _ref1.text;
+        switch (type) {
+          case 'stdout':
+            return _this.log.stdout(text);
+          case 'stderr':
+            return _this.log.stderr(text);
+        }
+      };
+      return _this.connection.onclose = function(event) {
+        _this.log.stdout("connection closed (" + pid + ")");
+        return delete _this.connection;
+      };
     });
     this.addButton('update', function*() {
       var stderr, stdout, _ref;
